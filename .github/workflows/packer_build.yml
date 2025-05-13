@@ -49,3 +49,9 @@ jobs:
     
       - name: Use AMI ID
         run: echo "Built AMI ID is ${{ steps.build.outputs.ami_id }}"
+
+      - name: Trigger Terraform workflow
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: terraform_build.yml
+          inputs: '{ "ami_id": "${{ steps.build.outputs.ami_id }}" }'
