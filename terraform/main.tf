@@ -57,7 +57,7 @@ module "ec2" {
       ami_id                = var.ami_id
       instance_type         = "t2.micro"
       availability_zone     = module.vpc.azs[0]
-      vpc_security_group_id = [module.security_group.security_group_id["ecs"]]
+      vpc_security_group_id = [module.SecurityGroup.security_group_id["ecs"]]
       subnet_id             = module.vpc.public_subnets[0]
       name                  = "test-instance"
       env                   = "test"
@@ -66,5 +66,5 @@ module "ec2" {
   key_pair_name = module.keypair.key_pair_name
   ebs_size      = 8
   ebs_device_name = "/dev/sdh"
-  depends_on = [ module.keypair, module.web_server_sg ]
+  depends_on = [ module.keypair, module.SecurityGroup ]
 }
