@@ -86,33 +86,37 @@ Make sure these are configured in your repo settings under `Settings > Secrets a
 ⸻
 
 📌 Notes
-	- `	Terraform version used: 1.5.x recommended for modern syntax (e.g., optional attributes).`
-	- `	Packer uses an Ansible local provisioner to install and configure packages on the AMI.`
-	- `	Terraform modules are organized and reusable (e.g., EC2, SG, VPC, keypair).`
+
+	•	Terraform version used: 1.5.x recommended for modern syntax (e.g., optional attributes).
+	•	Packer uses an Ansible local provisioner to install and configure packages on the AMI.
+	•	Terraform modules are organized and reusable (e.g., EC2, SG, VPC, keypair).
 
 ⸻
 
 📷 Outputs
-	-`	✅ AMI created: Visible in AWS Console under EC2 > AMIs`
-	-`	✅ EC2 launched: View in AWS EC2 Dashboard`
-	-`	✅ CI/CD logs: Available in GitHub Actions tab`
+
+	•	✅ AMI created: Visible in AWS Console under EC2 > AMIs
+	•	✅ EC2 launched: View in AWS EC2 Dashboard
+	•	✅ CI/CD logs: Available in GitHub Actions tab
 
 ⸻
 
 🚀 Future Improvements
-	-`	Add support for multiple environments (e.g., staging, production)`
-	-`	Integrate Slack/Teams notifications`
-	-`	Enable S3 remote backend for Terraform state`
-	-`	Auto-deregister old AMIs and delete unused snapshots`
+
+	•	Add support for multiple environments (e.g., staging, production)
+	•	Integrate Slack/Teams notifications
+	•	Enable S3 remote backend for Terraform state
+	•	Auto-deregister old AMIs and delete unused snapshots
 
 ⸻
 
 🛠️ Requirements
-	-`	AWS Account
-	-`	GitHub Repository
-	-`	GitHub Actions enabled
-	-`	Terraform CLI (>=1.5.0 recommended)
-	-`	Packer (>=1.8.0)
-	-`	Ansible (>=2.10)
+
+	•	AWS Account
+	•	GitHub Repository
+	•	GitHub Actions enabled
+	•	Terraform CLI (>=1.5.0 recommended)
+	•	Packer (>=1.8.0)
+	•	Ansible (>=2.10)
 
 ⸻
