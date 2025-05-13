@@ -41,7 +41,7 @@ jobs:
             ./packer/aws-docker-ubuntu.pkr.hcl
 
           # Extract AMI ID from output
-          AMI_ID=$(grep 'artifact,0,id' $OUTPUT_FILE | cut -d, -f6 | cut -d: -f2)
+          AMI_ID=$(jq -r '.builds[0].artifact_id' ./packer/manifest.json | cut -d':' -f2)
           echo "Extracted AMI ID: $AMI_ID"
 
           echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV

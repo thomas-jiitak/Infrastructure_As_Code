@@ -12,26 +12,26 @@
         sysctl_set: yes
         reload: yes
 
-    - name: 2. Disable IPv6
-      blockinfile:
-        path: /etc/sysctl.conf
-        block: |
-          net.ipv6.conf.all.disable_ipv6 = 1
-          net.ipv6.conf.default.disable_ipv6 = 1
-      notify: Reload sysctl
+    # - name: 2. Disable IPv6
+    #   blockinfile:
+    #     path: /etc/sysctl.conf
+    #     block: |
+    #       net.ipv6.conf.all.disable_ipv6 = 1
+    #       net.ipv6.conf.default.disable_ipv6 = 1
+    #   notify: Reload sysctl
 
-    - name: 3. Disable secure ICMP redirects
-      sysctl:
-        name: net.ipv4.conf.all.accept_redirects
-        value: '0'
-        sysctl_set: yes
-        reload: yes
+    # - name: 3. Disable secure ICMP redirects
+    #   sysctl:
+    #     name: net.ipv4.conf.all.accept_redirects
+    #     value: '0'
+    #     sysctl_set: yes
+    #     reload: yes
 
-    - name: 4. Collect login and logout events
-      lineinfile:
-        path: /etc/audit/rules.d/audit.rules
-        line: '-w /var/log/lastlog -p wa -k logins'
-        create: yes
+    # - name: 4. Collect login and logout events
+    #   lineinfile:
+    #     path: /etc/audit/rules.d/audit.rules
+    #     line: '-w /var/log/lastlog -p wa -k logins'
+    #     create: yes
 
     - name: 5. Ensure password expiration is 90 days or less
       lineinfile:
