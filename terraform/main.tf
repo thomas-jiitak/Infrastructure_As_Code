@@ -16,18 +16,37 @@ module "vpc" {
   }
 }
 
-module "web_server_sg" {
-  source = "terraform-aws-modules/security-group/aws//modules/http-80"
-
-  name        = "web-server"
-  description = "Security group for web-server with HTTP ports open within VPC"
+module "SecurityGroup" {
+  source = "./SG"
   vpc_id      = module.vpc.vpc_id
+  sg_resources = {
+    ecs = {
+      sg_name        = "ec2-sg-v2"
+      sg_description = "Security Group for EMS-Node Backend Application v2"
+      ingress_rules = [
+        {
+          from_port   = 22
+          to_port     = 22
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+        }
+      ]
+      egress_rules = [{
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+      }]
+    }
+  }
+  tags = {
+  }
   depends_on = [ module.vpc ]
 }
 
 module "keypair" {
   source  = "thomasvjoseph/keypair/aws"
-  version = "1.1.3"
+   version = "1.1.1"
   key_pair_name = "my-key-pair"
 }
 
@@ -38,7 +57,7 @@ module "ec2" {
       ami_id                = var.ami_id
       instance_type         = "t2.micro"
       availability_zone     = module.vpc.azs[0]
-      vpc_security_group_id = [module.web_server_sg.security_group_id]
+      vpc_security_group_id = [module.security_group.security_group_id["ecs"]]
       subnet_id             = module.vpc.public_subnets[0]
       name                  = "test-instance"
       env                   = "test"
