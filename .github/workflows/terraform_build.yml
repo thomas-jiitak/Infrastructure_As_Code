@@ -65,6 +65,7 @@ jobs:
             -var "region=${{ secrets.AWS_REGION }}" \
             -var "aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
             -var "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}" \
+            -var "ami_id=${{ github.event.inputs.ami_id }}" \
             -auto-approve
 
     - name: Deregister AMI and Delete Snapshots
