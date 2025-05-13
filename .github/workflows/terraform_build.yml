@@ -12,12 +12,10 @@ jobs:
   terraform_build:
     name: 'Terraform Plan Format and Validate'
     runs-on: ubuntu-latest
-
     defaults:
       run:
         shell: bash
         working-directory: ./terraform
-
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -27,6 +25,9 @@ jobs:
       with:
         terraform_version: "1.1.7"
 
+    - name: Debug input
+      run: 'echo "AMI ID received: ${{ github.event.inputs.ami_id }}"'
+
     - name: Terraform Init
       run: terraform init
 
@@ -35,7 +36,7 @@ jobs:
         terraform plan \
             -var "region=${{ secrets.AWS_REGION }}" \
             -var "aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
-            -var "aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+            -var "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}" \
             -var "ami_id=${{ github.event.inputs.ami_id }}"    
         
     - name: Terraform Validate
@@ -46,8 +47,8 @@ jobs:
         terraform apply \
             -var "region=${{ secrets.AWS_REGION }}" \
             -var "aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
-            -var "aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-            -var "ami_id=${{ github.event.inputs.ami_id }}"
+            -var "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}" \
+            -var "ami_id=${{ github.event.inputs.ami_id }}" \
             -auto-approve
 
     - name: Approve for Terraform Destroy
@@ -62,14 +63,14 @@ jobs:
         terraform destroy \
             -var "region=${{ secrets.AWS_REGION }}" \
             -var "aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
-            -var "aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+            -var "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}" \
             -auto-approve
 
     - name: Deregister AMI and Delete Snapshots
       env:
         AWS_REGION: ${{ secrets.AWS_REGION }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
         AMI_ID: ${{ github.event.inputs.ami_id }}
       run: |
         echo "Getting snapshot ID for AMI: $AMI_ID"
