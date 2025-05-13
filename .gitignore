@@ -1,0 +1,3 @@
+packer/aws-creds.pkrvars.hcl
+.vscode/
+.*.pkrvars.hcl

@@ -1,0 +1,57 @@
+---
+- name: Harden Ubuntu 22.04 - CIS Basic Controls
+  hosts: all
+  become: true
+  tasks:
+
+    - name: 1. Disable IP forwarding
+      sysctl:
+        name: net.ipv4.ip_forward
+        value: '0'
+        state: present
+        sysctl_set: yes
+        reload: yes
+
+    - name: 2. Disable IPv6
+      blockinfile:
+        path: /etc/sysctl.conf
+        block: |
+          net.ipv6.conf.all.disable_ipv6 = 1
+          net.ipv6.conf.default.disable_ipv6 = 1
+      notify: Reload sysctl
+
+    - name: 3. Disable secure ICMP redirects
+      sysctl:
+        name: net.ipv4.conf.all.accept_redirects
+        value: '0'
+        sysctl_set: yes
+        reload: yes
+
+    - name: 4. Collect login and logout events
+      lineinfile:
+        path: /etc/audit/rules.d/audit.rules
+        line: '-w /var/log/lastlog -p wa -k logins'
+        create: yes
+
+    - name: 5. Ensure password expiration is 90 days or less
+      lineinfile:
+        path: /etc/login.defs
+        regexp: '^PASS_MAX_DAYS'
+        line: 'PASS_MAX_DAYS   90'
+
+    - name: 6. Set SSH LogLevel to INFO
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?LogLevel'
+        line: 'LogLevel INFO'
+        create: yes
+      notify: Restart SSH
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: ssh
+        state: restarted
+
+    - name: Reload sysctl
+      command: sysctl -p

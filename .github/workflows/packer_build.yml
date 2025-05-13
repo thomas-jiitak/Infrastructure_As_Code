@@ -1,0 +1,50 @@
+name: packer build
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  packer:
+    runs-on: ubuntu-latest
+    name: Run Packer
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4 
+
+      - name: Setup `packer`
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+          version: latest
+
+      - name: Run `packer init`
+        id: init
+        run: "packer init ./packer/aws-docker-ubuntu.pkr.hcl"
+
+      - name: Run `packer validate`
+        id: validate
+        run: |
+          packer validate \
+            -var "region=${{ secrets.AWS_REGION }}" \
+            -var "aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            -var "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}" \
+            ./packer/aws-docker-ubuntu.pkr.hcl
+
+      - name: Run `packer build`
+        id: build
+        run: |
+          packer build \
+            -var "region=${{ secrets.AWS_REGION }}" \
+            -var "aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            -var "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}" \
+            ./packer/aws-docker-ubuntu.pkr.hcl
+
+          # Extract AMI ID from output
+          AMI_ID=$(grep 'artifact,0,id' $OUTPUT_FILE | cut -d, -f6 | cut -d: -f2)
+
+          echo "AMI ID: $AMI_ID" >> $GITHUB_ENV
+          echo "ami_id=$AMI_ID" >> $GITHUB_OUTPUT
+    
+      - name: Use AMI ID
+        run: echo "Built AMI ID is ${{ steps.build.outputs.ami_id }}"
