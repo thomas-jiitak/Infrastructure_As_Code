@@ -21,9 +21,8 @@ module "web_server_sg" {
 
   name        = "web-server"
   description = "Security group for web-server with HTTP ports open within VPC"
-  vpc_id      = "vpc-12345678"
-
-  ingress_cidr_blocks = ["10.10.0.0/16"]
+  vpc_id      = module.vpc.vpc_id
+  depends_on = [ module.vpc ]
 }
 
 module "keypair" {
@@ -48,4 +47,5 @@ module "ec2" {
   key_pair_name = module.keypair.key_pair_name
   ebs_size      = 8
   ebs_device_name = "/dev/sdh"
+  depends_on = [ module.keypair, module.web_server_sg ]
 }

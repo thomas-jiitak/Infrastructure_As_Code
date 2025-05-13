@@ -7,7 +7,7 @@ resource "aws_instance" "demo_instance" {
   subnet_id                   = each.value.subnet_id
   vpc_security_group_ids      = each.value.vpc_security_group_id
   key_name                    = var.key_pair_name
-  user_data                   = var.user_data
+  #user_data                   = var.user_data
   #iam_instance_profile        = aws_iam_instance_profile.ec2-profile.name
 
   ebs_block_device {

@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: 'Terraform Build and Destroy'
 
 on:
   workflow_dispatch:

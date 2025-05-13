@@ -23,9 +23,3 @@ variable "ebs_device_name" {
   type        = string
   description = "value of the device name of ebs volume"
 }
-
-variable "user_data" {
-  type        = string
-  description = "value of the user data"
-  default = "null"
-}
