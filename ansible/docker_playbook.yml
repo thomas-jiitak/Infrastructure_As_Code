@@ -75,30 +75,30 @@
       tags:
         - docker
 
-    - name: Install docker-compose
-      remote_user: ubuntu
-      get_url:
-        url: "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64"
-        dest: "/usr/local/bin/docker-compose"
-        mode: "0755"
-      tags:
-        - docker
+    # - name: Install docker-compose
+    #   remote_user: ubuntu
+    #   get_url:
+    #     url: "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64"
+    #     dest: "/usr/local/bin/docker-compose"
+    #     mode: "0755"
+    #   tags:
+    #     - docker
 
-    - name: Create symbolic link for docker-compose
-      remote_user: ubuntu
-      command: ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-      tags:
-        - docker
+    # - name: Create symbolic link for docker-compose
+    #   remote_user: ubuntu
+    #   command: ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+    #   tags:
+    #     - docker
 
-    - name: Show docker-compose version
-      remote_user: ubuntu
-      command: /usr/local/bin/docker-compose --version
-      register: docker_compose_version
-      tags:
-        - docker
+    # - name: Show docker-compose version
+    #   remote_user: ubuntu
+    #   command: /usr/local/bin/docker-compose --version
+    #   register: docker_compose_version
+    #   tags:
+    #     - docker
 
-    - name: Print docker-compose version
-      debug:
-        msg: "Docker Compose version: {{ docker_compose_version.stdout }}"
-      tags:
-        - docker
+    # - name: Print docker-compose version
+    #   debug:
+    #     msg: "Docker Compose version: {{ docker_compose_version.stdout }}"
+    #   tags:
+    #     - docker
