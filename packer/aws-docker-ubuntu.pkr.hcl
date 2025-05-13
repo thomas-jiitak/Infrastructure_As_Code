@@ -49,7 +49,7 @@ build {
     "source.amazon-ebs.ubuntu"
   ]
   provisioner "ansible" {
-    playbook_file = "./ansible/cis_harden_ubuntu.ymll"
+    playbook_file = "./ansible/cis_harden_ubuntu.yml"
     #galaxy_file = "requirements.yml"
   }
   post-processor "manifest" {
